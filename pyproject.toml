@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plumage"
+version = "0.1.0"
+description = "A purple-led, muted-brown matplotlib data-visualization library."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "usf_comms" }]
+keywords = ["matplotlib", "dataviz", "visualization", "palette", "theme"]
+classifiers = [
+    "Framework :: Matplotlib",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "matplotlib>=3.7",
+    "numpy>=1.23",
+    "pandas>=1.5",
+]
+
+[project.optional-dependencies]
+docs = ["mkdocs>=1.5", "mkdocs-material>=9.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
