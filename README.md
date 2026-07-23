@@ -1,15 +1,17 @@
 # plumage
 
-A compact **matplotlib** data-visualization library with a considered color
-system: **purple** is the primary hue family and **muted brown** is the
-secondary. Purples carry the headline series, the lead categorical slot, and
-the default sequential ramp; browns carry the supporting series, the alternate
-ramp, and the warm pole of a purple↔brown diverging map. Every chart is drawn
-with matplotlib only — no seaborn or other backends.
+A compact **matplotlib** data-visualization library with an editorial look and
+a considered color system: **emerald** is the primary hue family and
+**espresso** is the secondary. Emeralds carry the headline series, the lead
+categorical slot, and the default sequential ramp; espressos carry the
+supporting series, the alternate ramp, and the warm pole of an emerald↔espresso
+diverging map. Everything sits on warm paper, with **serif titles** over a
+clean sans for data labels. Every chart is drawn with matplotlib only — no
+seaborn or other backends.
 
 The whole visualization library is a single ~200-line module
-(`src/plumage/__init__.py`); the palette lives at the top so the entire look
-retunes from one place.
+(`src/plumage/__init__.py`); the palette and type choices live at the top so
+the entire look retunes from one place.
 
 ![Palette](reports/figures/palette.png)
 
@@ -71,13 +73,13 @@ Everything is exported from the top-level `plumage` package.
 
 | Name | Description |
 | --- | --- |
-| `use_theme(base=10.5)` | Apply the plumage look globally via `rcParams`. |
-| `register_colormaps()` | Register `plumage_purple` / `_brown` / `_diverging` (+ `_r`) with matplotlib. |
+| `use_theme(base=10.5)` | Apply the plumage look globally via `rcParams` (serif titles, sans labels, warm paper). |
+| `register_colormaps()` | Register `plumage_emerald` / `_espresso` / `_diverging` (+ `_r`) with matplotlib. |
 | `categorical(n=None)` | The 8-slot categorical palette, or its first `n` slots. |
-| `sequential(n, family="purple")` | `n` evenly spaced colors from the purple or brown ramp. |
+| `sequential(n, family="emerald")` | `n` evenly spaced colors from the emerald or espresso ramp. |
 | `shade(color, amount)` | Lighten (`>0`) or darken (`<0`) a hex color. |
 
-Color constants: `PURPLE`, `BROWN` (100–700 step dicts), `PRIMARY`,
+Color constants: `EMERALD`, `ESPRESSO` (100–700 step dicts), `PRIMARY`,
 `SECONDARY`, `CATEGORICAL`, `CATEGORICAL_NAMES`, `INK`, `INK_SOFT`, `SURFACE`,
 `GRID`, `AXIS`, and the `*_CMAP` colormaps.
 
@@ -90,9 +92,9 @@ Color constants: `PURPLE`, `BROWN` (100–700 step dicts), `PRIMARY`,
 | `line(x, series, …)` | Line chart with optional direct end-labels. |
 | `area(x, series, stacked=True, …)` | Stacked or overlaid area chart. |
 | `scatter(x, y, groups=None, …)` | Scatter, optionally colored by a categorical array. |
-| `histogram(values, bins=30, …)` | Single-series histogram in the primary purple. |
+| `histogram(values, bins=30, …)` | Single-series histogram in the primary emerald. |
 | `heatmap(matrix, diverging=False, …)` | Heatmap for an array/DataFrame; `diverging` centers on zero. |
-| `correlation(df, …)` | Diverging purple↔brown correlation map. |
+| `correlation(df, …)` | Diverging emerald↔espresso correlation map. |
 
 Sample data for demos lives in `plumage.datasets`; the palette card and figure
 gallery live in `plumage.gallery`.
@@ -101,7 +103,7 @@ gallery live in `plumage.gallery`.
 
 `reports/trout_swing_rate.py` runs the library on a real Statcast dataset (one
 row per pitch Mike Trout saw in 2023) and renders his swing rate in each
-**pitch type × zone bucket** as a sequential-purple heatmap — a natural fit,
+**pitch type × zone bucket** as a sequential-emerald heatmap — a natural fit,
 since swing rate is a 0–1 magnitude. Statcast zones are grouped into five
 vertical buckets (the in-zone up/middle/low rows plus the chase quadrants), and
 cells with fewer than 15 pitches are left blank.
@@ -119,13 +121,16 @@ middle and lower thirds hard (50–86%). The tidy numbers land in
 
 ## Design notes
 
+- **Editorial by default.** Warm paper surface, a serif headline over a clean
+  sans for data labels, recessive chrome, and generous spacing — tuned to be
+  aesthetically pleasing and quick to read.
 - **Color follows identity, in fixed order.** Categorical hues are assigned
   slot 1..N and never cycled; a 9th series should fold into "Other" or become
   small multiples (`categorical(9)` raises rather than invent a hue).
-- **Purple leads, brown supports.** Neighbouring categorical slots come from
-  different hue families so adjacent series stay easy to tell apart.
-- **Diverging = two hues + a neutral midpoint.** The purple↔brown map meets at
-  a warm cream that reads as "nothing," so zero never looks like a value.
+- **Emerald leads, espresso supports.** Neighbouring categorical slots come
+  from different hue families so adjacent series stay easy to tell apart.
+- **Diverging = two hues + a neutral midpoint.** The emerald↔espresso map meets
+  at a warm cream that reads as "nothing," so zero never looks like a value.
 - **Recessive chrome.** No top/right spines, a single soft y-grid behind the
   data, muted axis ink, thin marks, and selective direct labels instead of a
   number on every point.

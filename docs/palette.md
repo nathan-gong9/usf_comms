@@ -1,36 +1,37 @@
 # Palette
 
 The color system is the point of the library. It is built from two hue
-families defined once at the top of `src/plumage/__init__.py`.
+families defined once at the top of `src/plumage/__init__.py`, on a warm paper
+surface with serif titles over a clean sans.
 
 ![Palette](../reports/figures/palette.png)
 
-## Primary — purple
+## Primary — emerald
 
-A single-hue sequential ramp, `PURPLE[100]` (lightest) → `PURPLE[700]`
+A single-hue sequential ramp, `EMERALD[100]` (lightest) → `EMERALD[700]`
 (darkest). It supplies the lead categorical slot, the default `image.cmap`
-(`plumage_purple`), and the headline series in every chart.
+(`plumage_emerald`), and the headline series in every chart.
 
 ```python
 import plumage as pl
-pl.PRIMARY            # "#8352bf"
-pl.sequential(5)      # 5 evenly spaced purples
+pl.PRIMARY            # "#107a55"
+pl.sequential(5)      # 5 evenly spaced emeralds
 ```
 
-## Secondary — muted brown
+## Secondary — espresso
 
-A parallel single-hue ramp, `BROWN[100]` → `BROWN[700]`. It supplies the
-supporting series, the `plumage_brown` colormap, and the warm pole of the
+A parallel single-hue ramp, `ESPRESSO[100]` → `ESPRESSO[700]`. It supplies the
+supporting series, the `plumage_espresso` colormap, and the warm pole of the
 diverging map.
 
 ```python
-pl.SECONDARY               # "#b0895a"
-pl.sequential(5, "brown")  # 5 evenly spaced browns
+pl.SECONDARY                  # "#7a583a"
+pl.sequential(5, "espresso")  # 5 evenly spaced espressos
 ```
 
 ## Categorical
 
-Eight fixed slots, purple-led and interleaved with browns so that
+Eight fixed slots, emerald-led and interleaved with espressos so that
 *neighbouring* series come from different hue families and stay easy to tell
 apart. Slots are assigned in order and **never cycled** — a ninth series folds
 into "Other" or becomes small multiples.
@@ -43,7 +44,7 @@ pl.categorical(9)     # ValueError — don't invent a hue
 
 ## Diverging
 
-`plumage_diverging` runs purple → cream → brown: two families that read as
+`plumage_diverging` runs emerald → cream → espresso: two families that read as
 opposites, meeting at a warm neutral midpoint that reads as "nothing." Use it
 for signed data such as correlations.
 
@@ -51,6 +52,14 @@ for signed data such as correlations.
 pl.correlation(df)                      # centered on zero automatically
 pl.heatmap(matrix, diverging=True)      # same map, any matrix
 ```
+
+## Type & chrome
+
+- Titles are set in a **serif** (Liberation Serif → DejaVu Serif → Georgia →
+  Times), left-aligned and bold, for an editorial headline feel.
+- Axis labels, ticks, legends, and annotations use a clean **sans** (Liberation
+  Sans → Helvetica → Arial → DejaVu Sans).
+- The surface is a warm paper cream; ink is a soft espresso-black.
 
 ## House rules
 

@@ -2,7 +2,7 @@
 
 A worked example that exercises the plumage library on a real Statcast dataset
 (one row per pitch Trout saw in 2023). It computes his swing rate in each
-pitch-type x zone-bucket cell and renders it as a sequential-purple heatmap.
+pitch-type x zone-bucket cell and renders it as a sequential-emerald heatmap.
 
 Usage::
 
@@ -67,20 +67,20 @@ def main(path: Path) -> None:
     overall = df["swing"].mean()
 
     pl.use_theme()
-    ax = pl.heatmap(rate, cmap="plumage_purple", fmt="{:.0%}",
-                    cbar_label="Swing rate", figsize=(7.6, 5.6))
+    ax = pl.heatmap(rate, cmap="plumage_emerald", fmt="{:.0%}",
+                    cbar_label="Swing rate", figsize=(7.8, 5.8))
     ax.set_xlabel("Zone bucket (top of strike zone → bottom)")
     ax.set_ylabel("Pitch type")
-    # Two-line header stacked above the plot so it never overlaps the grid.
-    ax.annotate("Mike Trout — 2023 swing rate", xy=(0, 1.0),
-                xycoords="axes fraction", xytext=(0, 40), textcoords="offset points",
-                color=pl.INK, fontweight="bold",
+    # Editorial header stacked above the plot: serif headline over an italic deck.
+    ax.annotate("Mike Trout swings less at what he can't reach", xy=(0, 1.0),
+                xycoords="axes fraction", xytext=(0, 44), textcoords="offset points",
+                color=pl.INK, fontfamily="serif", fontweight="bold",
                 fontsize=plt.rcParams["axes.titlesize"], va="bottom")
-    ax.annotate(f"{len(df):,} pitches · overall swing rate {overall:.0%} · "
-                f"cells with < {MIN_CELL} pitches left blank",
-                xy=(0, 1.0), xycoords="axes fraction", xytext=(0, 20),
-                textcoords="offset points", color=pl.INK_SOFT, va="bottom",
-                fontsize=plt.rcParams["legend.fontsize"])
+    ax.annotate(f"2023 swing rate by pitch type and zone · {len(df):,} pitches · "
+                f"overall {overall:.0%} · cells under {MIN_CELL} pitches left blank",
+                xy=(0, 1.0), xycoords="axes fraction", xytext=(0, 22),
+                textcoords="offset points", color=pl.INK_SOFT, fontstyle="italic",
+                fontfamily="serif", va="bottom", fontsize=plt.rcParams["legend.fontsize"])
 
     fig_out = ROOT / "reports" / "figures" / "trout_swing_rate.png"
     ax.figure.savefig(fig_out)

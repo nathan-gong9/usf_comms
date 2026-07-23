@@ -1,9 +1,9 @@
 site_name: plumage
-site_description: A purple-led, muted-brown matplotlib data-visualization library.
+site_description: An editorial, emerald-and-espresso matplotlib data-visualization library.
 theme:
   name: material
   palette:
-    primary: deep purple
+    primary: teal
     accent: brown
 nav:
   - Home: index.md

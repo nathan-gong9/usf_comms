@@ -1,9 +1,10 @@
 # plumage
 
-A compact matplotlib data-visualization library with a purple-led,
-muted-brown palette. Purples carry the headline series and the default
-sequential ramp; browns carry the supporting series and the warm pole of the
-purple↔brown diverging map. Everything is drawn with matplotlib only.
+A compact matplotlib data-visualization library with an editorial,
+emerald-led, espresso-supported palette. Emeralds carry the headline series and
+the default sequential ramp; espressos carry the supporting series and the warm
+pole of the emerald↔espresso diverging map. Titles are set in a serif over a
+clean sans on warm paper. Everything is drawn with matplotlib only.
 
 ![Palette](../reports/figures/palette.png)
 

@@ -26,20 +26,20 @@ def swatches(ax=None, figsize=(8, 3.4)):
     ax.set_axis_off()
 
     def row(y, colors, names, heading):
-        ax.text(-0.4, y + 0.55, heading, color=pl.INK_SOFT, fontweight="bold",
-                fontsize=plt.rcParams["legend.fontsize"])
+        ax.text(-0.4, y + 1.06, heading, color=pl.INK, fontfamily="serif",
+                fontweight="bold", fontsize=plt.rcParams["axes.labelsize"] + 1)
         for i, (c, name) in enumerate(zip(colors, names)):
             ax.add_patch(plt.Rectangle((i, y), 0.9, 0.9, facecolor=c,
                                        edgecolor=pl.SURFACE, linewidth=2))
             ax.text(i + 0.45, y - 0.22, name, ha="center", va="top",
                     color=pl.INK_SOFT, fontsize=8)
 
-    steps = [str(k) for k in sorted(pl.PURPLE)]
+    steps = [str(k) for k in sorted(pl.EMERALD)]
     row(4.0, pl.CATEGORICAL, pl.CATEGORICAL_NAMES, "Categorical")
-    row(2.0, [pl.PURPLE[k] for k in sorted(pl.PURPLE)], steps, "Purple (primary)")
-    row(0.0, [pl.BROWN[k] for k in sorted(pl.BROWN)], steps, "Brown (secondary)")
+    row(2.0, [pl.EMERALD[k] for k in sorted(pl.EMERALD)], steps, "Emerald (primary)")
+    row(0.0, [pl.ESPRESSO[k] for k in sorted(pl.ESPRESSO)], steps, "Espresso (secondary)")
     ax.set_xlim(-0.6, len(pl.CATEGORICAL) + 0.2)
-    ax.set_ylim(-0.6, 5.4)
+    ax.set_ylim(-0.6, 5.8)
     ax.set_aspect("equal")
     return ax
 

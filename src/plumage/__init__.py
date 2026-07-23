@@ -1,11 +1,13 @@
 """plumage — a compact matplotlib data-visualization library.
 
-Purple is the *primary* hue family (headline series, lead categorical slot,
-default sequential ramp); muted brown is the *secondary* family (supporting
-series, alternate ramp, warm pole of the purple<->brown diverging map). Drawn
-with matplotlib only. Chart helpers return the Axes so results compose with
-matplotlib. House rules: one hue per series in fixed order (never cycled), a
-legend only for >= 2 series, selective direct labels, recessive chrome.
+An editorial look on warm paper: **emerald** is the primary hue family
+(headline series, lead categorical slot, default sequential ramp) and
+**espresso** is the secondary family (supporting series, alternate ramp, warm
+pole of the emerald<->espresso diverging map). Titles set in a serif, data
+labels in a clean sans. Drawn with matplotlib only. Chart helpers return the
+Axes so results compose with matplotlib. House rules: one hue per series in
+fixed order (never cycled), a legend only for >= 2 series, selective direct
+labels, recessive chrome.
 
     >>> import plumage as pl; pl.use_theme()
     >>> df = pl.datasets.monthly_channels()
@@ -23,33 +25,33 @@ from . import datasets  # noqa: F401  (re-exported convenience)
 
 __version__ = "0.1.0"
 
-# Ink & surface (warm, near-neutral chrome).
-INK, INK_SOFT = "#2e2838", "#6a6276"
-SURFACE, GRID, AXIS = "#faf8f5", "#e7e1da", "#cfc7bd"
+# Ink & surface: warm paper chrome for an editorial, print-like feel.
+INK, INK_SOFT = "#241d16", "#6f6152"
+SURFACE, GRID, AXIS = "#f7f3ec", "#e6ded1", "#cdc2b0"
 
-# Sequential ramps, light->dark (steps 100..700): purple primary, brown secondary.
-PURPLE = {100: "#f2ecfa", 200: "#dccbf0", 300: "#c0a4e3", 400: "#a179d3",
-          500: "#8352bf", 600: "#67399e", 700: "#4a2775"}
-BROWN = {100: "#f2ebe2", 200: "#e0d0bb", 300: "#caac82", 400: "#b0895a",
-         500: "#916a43", 600: "#6f4f33", 700: "#4d3623"}
-PRIMARY, SECONDARY = PURPLE[500], BROWN[400]
+# Sequential ramps, light->dark (steps 100..700): emerald primary, espresso secondary.
+EMERALD = {100: "#e5f3ec", 200: "#c1e5d3", 300: "#8fceac", 400: "#52b184",
+           500: "#1f9566", 600: "#107a55", 700: "#0a5540"}
+ESPRESSO = {100: "#efe7df", 200: "#dcc9b8", 300: "#c1a488", 400: "#a07d5c",
+            500: "#7a583a", 600: "#573d28", 700: "#3a281a"}
+PRIMARY, SECONDARY = EMERALD[600], ESPRESSO[500]
 
-# Categorical: purple-led, interleaved with browns so neighbours differ.
-CATEGORICAL = ["#5b3a8c", "#b0895a", "#9575cd", "#6f4f33",
-               "#7e4f9e", "#caac82", "#3f2266", "#916a43"]
-CATEGORICAL_NAMES = ["amethyst", "sienna", "lavender", "umber",
-                     "orchid", "fawn", "indigo", "walnut"]
-DIVERGING_STOPS = [PURPLE[700], PURPLE[400], "#f4efe6", BROWN[400], BROWN[700]]
+# Categorical: emerald-led, interleaved with espresso so neighbours differ.
+CATEGORICAL = ["#0a5540", "#a07d5c", "#3aa87d", "#573d28",
+               "#8fceac", "#7a583a", "#12805d", "#c8ad8a"]
+CATEGORICAL_NAMES = ["pine", "caramel", "emerald", "cacao",
+                     "mint", "espresso", "viridian", "fawn"]
+DIVERGING_STOPS = [EMERALD[700], EMERALD[400], "#f2ede2", ESPRESSO[400], ESPRESSO[700]]
 
 
 def _ramp(name, steps):
     return LinearSegmentedColormap.from_list(name, [steps[k] for k in sorted(steps)])
 
-PURPLE_CMAP = _ramp("plumage_purple", PURPLE)
-BROWN_CMAP = _ramp("plumage_brown", BROWN)
+EMERALD_CMAP = _ramp("plumage_emerald", EMERALD)
+ESPRESSO_CMAP = _ramp("plumage_espresso", ESPRESSO)
 DIVERGING_CMAP = LinearSegmentedColormap.from_list("plumage_diverging", DIVERGING_STOPS)
-_CMAPS = {"plumage_purple": PURPLE_CMAP, "plumage_purple_r": PURPLE_CMAP.reversed(),
-          "plumage_brown": BROWN_CMAP, "plumage_brown_r": BROWN_CMAP.reversed(),
+_CMAPS = {"plumage_emerald": EMERALD_CMAP, "plumage_emerald_r": EMERALD_CMAP.reversed(),
+          "plumage_espresso": ESPRESSO_CMAP, "plumage_espresso_r": ESPRESSO_CMAP.reversed(),
           "plumage_diverging": DIVERGING_CMAP, "plumage_diverging_r": DIVERGING_CMAP.reversed()}
 
 
@@ -68,9 +70,9 @@ def categorical(n=None):
     return CATEGORICAL[:n]
 
 
-def sequential(n, family="purple"):
-    """``n`` evenly spaced colors sampled from the purple or brown ramp."""
-    cmap = {"purple": PURPLE_CMAP, "brown": BROWN_CMAP}[family]
+def sequential(n, family="emerald"):
+    """``n`` evenly spaced colors sampled from the emerald or espresso ramp."""
+    cmap = {"emerald": EMERALD_CMAP, "espresso": ESPRESSO_CMAP}[family]
     return [to_hex(cmap(0.6))] if n == 1 else [to_hex(cmap(i / (n - 1))) for i in range(n)]
 
 
@@ -92,18 +94,19 @@ def use_theme(base=10.5):
         "figure.constrained_layout.use": True,
         "axes.edgecolor": AXIS, "axes.linewidth": 1.0, "axes.axisbelow": True,
         "axes.spines.top": False, "axes.spines.right": False,
-        "axes.grid": True, "axes.grid.axis": "y", "grid.color": GRID, "grid.linewidth": 0.8,
-        "axes.prop_cycle": cycler(color=CATEGORICAL), "image.cmap": "plumage_purple",
+        "axes.grid": True, "axes.grid.axis": "y", "grid.color": GRID, "grid.linewidth": 0.9,
+        "axes.prop_cycle": cycler(color=CATEGORICAL), "image.cmap": "plumage_emerald",
         "patch.edgecolor": SURFACE, "patch.force_edgecolor": True,
-        "text.color": INK, "axes.labelcolor": INK, "axes.titlecolor": INK,
+        "text.color": INK, "axes.labelcolor": INK_SOFT, "axes.titlecolor": INK,
         "xtick.color": INK_SOFT, "ytick.color": INK_SOFT,
         "xtick.labelcolor": INK_SOFT, "ytick.labelcolor": INK_SOFT,
         "xtick.major.size": 0.0, "ytick.major.size": 0.0,
-        "font.family": "sans-serif", "font.size": base,
-        "axes.titlesize": base + 3, "axes.titleweight": "bold", "axes.titlelocation": "left",
-        "axes.titlepad": 12, "axes.labelsize": base, "legend.fontsize": base - 1,
-        "figure.titlesize": base + 6, "figure.titleweight": "bold",
-        "legend.frameon": False, "lines.linewidth": 2.2, "lines.solid_capstyle": "round",
+        "font.family": "sans-serif", "font.size": base,   # sans for data; serif for titles
+        "font.sans-serif": ["Liberation Sans", "Helvetica", "Arial", "DejaVu Sans"],
+        "font.serif": ["Liberation Serif", "DejaVu Serif", "Georgia", "Times New Roman"],
+        "axes.titlesize": base + 6, "axes.titleweight": "bold", "axes.titlelocation": "left",
+        "axes.titlepad": 16, "axes.labelsize": base - 0.5, "legend.fontsize": base - 0.5,
+        "legend.frameon": False, "lines.linewidth": 2.4, "lines.solid_capstyle": "round",
     })
 
 
@@ -118,11 +121,11 @@ def _ax(ax, figsize):
 
 
 def _done(ax, title=None, xlabel=None, ylabel=None):
-    """Set optional axis labels + left-aligned title, then return the Axes."""
+    """Set optional axis labels + a left-aligned serif title, then return the Axes."""
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     if title:
-        ax.set_title(title)
+        ax.set_title(title, fontfamily="serif")
     return ax
 
 
@@ -220,7 +223,7 @@ def scatter(x, y, *, groups=None, ax=None, size=34, title=None,
 
 def histogram(values, *, bins=30, ax=None, color=None, title=None,
               xlabel=None, ylabel="Count", figsize=(7, 4.4)):
-    """Single-series histogram in the primary purple."""
+    """Single-series histogram in the primary emerald."""
     ax = _ax(ax, figsize)
     ax.hist(np.asarray(values), bins=bins, color=color or PRIMARY,
             edgecolor=SURFACE, linewidth=0.7, zorder=3)
@@ -228,7 +231,7 @@ def histogram(values, *, bins=30, ax=None, color=None, title=None,
 
 
 def heatmap(matrix, *, row_labels=None, col_labels=None, ax=None,
-            cmap="plumage_purple", diverging=False, annotate=True,
+            cmap="plumage_emerald", diverging=False, annotate=True,
             fmt="{:.2f}", cbar_label=None, title=None, figsize=(6.5, 5.4)):
     """Heatmap for a 2-D array or DataFrame; ``diverging=True`` centers on zero."""
     ax = _ax(ax, figsize)
