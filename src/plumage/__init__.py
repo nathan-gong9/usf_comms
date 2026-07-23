@@ -247,6 +247,8 @@ def heatmap(matrix, *, row_labels=None, col_labels=None, ax=None,
     if annotate:
         for i in range(m.shape[0]):
             for j in range(m.shape[1]):  # label color from cell luminance
+                if not np.isfinite(m[i, j]):
+                    continue          # leave empty (masked) cells unlabelled
                 r, g, b, _ = im.cmap(im.norm(m[i, j]))
                 txt = INK if 0.299 * r + 0.587 * g + 0.114 * b > 0.6 else SURFACE
                 ax.text(j, i, fmt.format(m[i, j]), ha="center", va="center",

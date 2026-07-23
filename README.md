@@ -97,6 +97,26 @@ Color constants: `PURPLE`, `BROWN` (100–700 step dicts), `PRIMARY`,
 Sample data for demos lives in `plumage.datasets`; the palette card and figure
 gallery live in `plumage.gallery`.
 
+## Worked example — Mike Trout's 2023 swing rate
+
+`reports/trout_swing_rate.py` runs the library on a real Statcast dataset (one
+row per pitch Mike Trout saw in 2023) and renders his swing rate in each
+**pitch type × zone bucket** as a sequential-purple heatmap — a natural fit,
+since swing rate is a 0–1 magnitude. Statcast zones are grouped into five
+vertical buckets (the in-zone up/middle/low rows plus the chase quadrants), and
+cells with fewer than 15 pitches are left blank.
+
+```bash
+# raw data stays out of git (see .gitignore); pass its path or drop it in data/raw/
+python reports/trout_swing_rate.py path/to/trout_2023.csv
+```
+
+![Trout swing rate](reports/figures/trout_swing_rate.png)
+
+Trout rarely offers at pitches up out of the zone (3–12%) and attacks the
+middle and lower thirds hard (50–86%). The tidy numbers land in
+`reports/trout_swing_rate_summary.csv`.
+
 ## Design notes
 
 - **Color follows identity, in fixed order.** Categorical hues are assigned
