@@ -1,14 +1,13 @@
 """A tiny exploratory data analysis (EDA) library.
 
 Data wrangling uses pandas/numpy; every visualization is drawn with
-matplotlib only (no seaborn or other plotting backends).
+matplotlib only (no seaborn or other plotting backends). Charts use a
+muted natural palette of browns, beiges, and neutrals, with minimal,
+well-labeled styling.
 
 Usage:
-    import pandas as pd
     from eda import EDA
-
-    df = pd.read_csv("data.csv")
-    report = EDA(df)
+    report = EDA(df)           # df is a pandas DataFrame
     report.overview()          # printed summary
     report.plot_all()          # grid of diagnostic plots
 """
@@ -20,6 +19,32 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
+
+# --- Muted natural palette: browns, beiges, neutrals ------------------- #
+INK = "#463f36"        # soft dark brown for text and lines
+BG = "#f4efe6"         # warm cream background
+GRID = "#e0d8c8"       # pale beige gridlines
+PRIMARY = "#8a6f52"    # walnut brown (main series)
+SERIES = ["#8a6f52", "#b79b74", "#a7a17d", "#7c7a63", "#cbb894", "#9c7f63"]
+# Diverging map for correlations: walnut -> cream -> muted sage
+CORR_CMAP = LinearSegmentedColormap.from_list("naturals", ["#8a6f52", "#f4efe6", "#7c8168"])
+
+
+def _apply_theme() -> None:
+    """Set matplotlib rcParams for a minimal, natural look."""
+    plt.rcParams.update({
+        "figure.facecolor": BG, "axes.facecolor": BG, "savefig.facecolor": BG,
+        "axes.edgecolor": GRID, "axes.linewidth": 0.8, "axes.axisbelow": True,
+        "axes.grid": False, "axes.spines.top": False, "axes.spines.right": False,
+        "grid.color": GRID, "grid.linewidth": 0.7, "text.color": INK,
+        "axes.labelcolor": INK, "axes.titlecolor": INK, "xtick.color": INK,
+        "ytick.color": INK, "axes.titlesize": 11, "axes.titleweight": "bold",
+        "font.size": 9.5, "figure.titlesize": 14, "figure.titleweight": "bold",
+    })
+
+
+_apply_theme()
 
 
 class EDA:
@@ -32,24 +57,18 @@ class EDA:
         self.numeric = df.select_dtypes(include="number").columns.tolist()
         self.categorical = [c for c in df.columns if c not in self.numeric]
 
-    # ------------------------------------------------------------------ #
-    # Text summaries
-    # ------------------------------------------------------------------ #
     def overview(self) -> pd.DataFrame:
         """Print shape/dtype info and return a per-column summary frame."""
         rows, cols = self.df.shape
         mem = self.df.memory_usage(deep=True).sum() / 1024 ** 2
         print(f"Rows: {rows:,}   Columns: {cols}   Memory: {mem:.2f} MB")
         print(f"Numeric: {len(self.numeric)}   Categorical: {len(self.categorical)}")
-
-        summary = pd.DataFrame(
-            {
-                "dtype": self.df.dtypes.astype(str),
-                "missing": self.df.isna().sum(),
-                "missing_%": (self.df.isna().mean() * 100).round(2),
-                "unique": self.df.nunique(),
-            }
-        )
+        summary = pd.DataFrame({
+            "dtype": self.df.dtypes.astype(str),
+            "missing": self.df.isna().sum(),
+            "missing_%": (self.df.isna().mean() * 100).round(2),
+            "unique": self.df.nunique(),
+        })
         print("\n" + summary.to_string())
         return summary
 
@@ -66,9 +85,6 @@ class EDA:
         miss = miss[miss > 0].sort_values(ascending=False)
         return pd.DataFrame({"missing": miss, "percent": (miss / len(self.df) * 100).round(2)})
 
-    # ------------------------------------------------------------------ #
-    # Plot helpers
-    # ------------------------------------------------------------------ #
     @staticmethod
     def _grid(n: int, ncols: int = 3, size: float = 4.0):
         """Create a right-sized subplot grid and return (fig, flat_axes)."""
@@ -86,11 +102,11 @@ class EDA:
             return None
         fig, axes = self._grid(len(self.numeric))
         for ax, col in zip(axes, self.numeric):
-            data = self.df[col].dropna()
-            ax.hist(data, bins=bins, color="#4c72b0", edgecolor="white")
+            ax.hist(self.df[col].dropna(), bins=bins, color=PRIMARY, edgecolor=BG, linewidth=0.5)
             ax.set_title(col)
-            ax.set_ylabel("count")
-        fig.suptitle("Numeric distributions", fontsize=14)
+            ax.set_ylabel("Count")
+            ax.grid(axis="y")
+        fig.suptitle("Distributions", y=1.0)
         fig.tight_layout()
         return fig
 
@@ -100,11 +116,17 @@ class EDA:
             return None
         fig, axes = self._grid(len(self.numeric))
         for ax, col in zip(axes, self.numeric):
-            ax.boxplot(self.df[col].dropna(), vert=True, patch_artist=True,
-                       boxprops=dict(facecolor="#dd8452"))
+            ax.boxplot(
+                self.df[col].dropna(), vert=True, widths=0.5, patch_artist=True,
+                boxprops=dict(facecolor=SERIES[1], edgecolor=INK),
+                medianprops=dict(color=INK, linewidth=1.4),
+                whiskerprops=dict(color=INK), capprops=dict(color=INK),
+                flierprops=dict(marker="o", markersize=3, markerfacecolor=PRIMARY,
+                                markeredgecolor="none", alpha=0.5))
             ax.set_title(col)
             ax.set_xticks([])
-        fig.suptitle("Boxplots", fontsize=14)
+            ax.grid(axis="y")
+        fig.suptitle("Spread & outliers", y=1.0)
         fig.tight_layout()
         return fig
 
@@ -116,10 +138,11 @@ class EDA:
         fig, axes = self._grid(len(cats))
         for ax, col in zip(axes, cats):
             counts = self.df[col].value_counts().head(top)
-            ax.barh(counts.index.astype(str)[::-1], counts.values[::-1], color="#55a868")
+            ax.barh(counts.index.astype(str)[::-1], counts.values[::-1], color=PRIMARY)
             ax.set_title(col)
-            ax.set_xlabel("count")
-        fig.suptitle("Categorical frequencies", fontsize=14)
+            ax.set_xlabel("Count")
+            ax.grid(axis="x")
+        fig.suptitle(f"Top {top} categories", y=1.0)
         fig.tight_layout()
         return fig
 
@@ -128,18 +151,19 @@ class EDA:
         if len(self.numeric) < 2:
             return None
         corr = self.df[self.numeric].corr()
-        fig, ax = plt.subplots(figsize=(1 + len(corr), 1 + len(corr)))
-        im = ax.imshow(corr, cmap="coolwarm", vmin=-1, vmax=1)
-        ax.set_xticks(range(len(corr)))
-        ax.set_yticks(range(len(corr)))
-        ax.set_xticklabels(corr.columns, rotation=45, ha="right")
-        ax.set_yticklabels(corr.columns)
-        for i in range(len(corr)):
-            for j in range(len(corr)):
+        n = len(corr)
+        fig, ax = plt.subplots(figsize=(1.2 + n, 1.2 + n))
+        im = ax.imshow(corr, cmap=CORR_CMAP, vmin=-1, vmax=1)
+        ax.set_xticks(range(n), corr.columns, rotation=45, ha="right")
+        ax.set_yticks(range(n), corr.columns)
+        ax.tick_params(length=0)
+        for i in range(n):
+            for j in range(n):
                 ax.text(j, i, f"{corr.iloc[i, j]:.2f}", ha="center", va="center",
-                        color="black", fontsize=8)
-        fig.colorbar(im, ax=ax, shrink=0.8)
-        ax.set_title("Correlation matrix")
+                        color=INK, fontsize=8)
+        cbar = fig.colorbar(im, ax=ax, shrink=0.75, label="Correlation")
+        cbar.outline.set_edgecolor(GRID)
+        ax.set_title("Correlation")
         fig.tight_layout()
         return fig
 
@@ -150,14 +174,16 @@ class EDA:
                 raise ValueError(f"{col!r} is not a numeric column.")
         fig, ax = plt.subplots(figsize=(6, 5))
         if hue and hue in self.df.columns:
-            for label, grp in self.df.groupby(hue):
-                ax.scatter(grp[x], grp[y], label=str(label), alpha=0.7, s=20)
-            ax.legend(title=hue, fontsize=8)
+            for i, (label, grp) in enumerate(self.df.groupby(hue)):
+                ax.scatter(grp[x], grp[y], label=str(label), s=22, alpha=0.8,
+                           color=SERIES[i % len(SERIES)], edgecolor="none")
+            ax.legend(title=hue, frameon=False, fontsize=8)
         else:
-            ax.scatter(self.df[x], self.df[y], alpha=0.7, s=20, color="#4c72b0")
+            ax.scatter(self.df[x], self.df[y], s=22, alpha=0.8, color=PRIMARY, edgecolor="none")
         ax.set_xlabel(x)
         ax.set_ylabel(y)
         ax.set_title(f"{y} vs {x}")
+        ax.grid(True)
         fig.tight_layout()
         return fig
 

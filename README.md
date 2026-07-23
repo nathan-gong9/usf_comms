@@ -2,8 +2,14 @@
 
 A tiny exploratory data analysis (EDA) library. Data wrangling uses
 pandas/numpy; **every visualization is drawn with matplotlib only** — no
-seaborn or other plotting backends. The whole thing is a single ~170-line
+seaborn or other plotting backends. The whole thing is a single <200-line
 module.
+
+Charts are intentionally minimal and well-labeled, using a muted natural
+palette of browns, beiges, and neutrals (walnut, tan, sage, warm cream).
+The theme is applied globally at import via matplotlib `rcParams`, so every
+figure is visually consistent. Palette constants (`INK`, `BG`, `PRIMARY`,
+`SERIES`, `CORR_CMAP`) live at the top of `eda.py` if you want to retune it.
 
 ## Install
 
