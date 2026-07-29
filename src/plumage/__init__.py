@@ -56,9 +56,9 @@ _CMAPS = {"plumage_emerald": EMERALD_CMAP, "plumage_emerald_r": EMERALD_CMAP.rev
 
 
 def register_colormaps():
-    """Register the plumage colormaps with matplotlib (idempotent)."""
+    """Register the plumage colormaps with matplotlib (idempotent, no re-warn)."""
     for name, cmap in _CMAPS.items():
-        mpl.colormaps.register(cmap, name=name, force=True)
+        if name not in mpl.colormaps: mpl.colormaps.register(cmap, name=name)
 
 
 def categorical(n=None):
