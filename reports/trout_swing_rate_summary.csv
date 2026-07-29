@@ -1,0 +1,41 @@
+pitch,bucket,swing_rate,pitches
+4-Seam,Chase up,0.068,768
+4-Seam,Up,0.547,598
+4-Seam,Middle,0.764,478
+4-Seam,Low,0.562,251
+4-Seam,Chase low,0.127,314
+Slider,Chase up,0.077,52
+Slider,Up,0.294,51
+Slider,Middle,0.504,127
+Slider,Low,0.665,167
+Slider,Chase low,0.337,445
+Sinker,Chase up,0.11,163
+Sinker,Up,0.375,88
+Sinker,Middle,0.714,182
+Sinker,Low,0.628,145
+Sinker,Chase low,0.262,240
+Cutter,Chase up,0.034,87
+Cutter,Up,0.417,72
+Cutter,Middle,0.753,85
+Cutter,Low,0.766,47
+Cutter,Chase low,0.254,134
+Change,Chase up,0.121,33
+Change,Up,0.278,18
+Change,Middle,0.667,45
+Change,Low,0.855,76
+Change,Chase low,0.364,195
+Curve,Chase up,0.026,38
+Curve,Up,0.111,27
+Curve,Middle,0.289,45
+Curve,Low,0.388,67
+Curve,Chase low,0.205,156
+Sweeper,Chase up,0.062,16
+Sweeper,Up,0.312,16
+Sweeper,Middle,,11
+Sweeper,Low,0.667,27
+Sweeper,Chase low,0.328,64
+Other,Chase up,0.0,24
+Other,Up,,12
+Other,Middle,0.444,18
+Other,Low,0.667,30
+Other,Chase low,0.398,88

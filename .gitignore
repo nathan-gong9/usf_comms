@@ -1,20 +1,28 @@
-# Python bytecode / caches
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Distribution / packaging
-build/
-dist/
 *.egg-info/
 .eggs/
-
-# Environments
+build/
+dist/
 .venv/
 venv/
-env/
 
-# Test / coverage
-.pytest_cache/
-.coverage
-htmlcov/
+# Notebooks
+.ipynb_checkpoints/
+
+# Data science tree: keep the folders, ignore their contents
+data/raw/*
+data/interim/*
+data/processed/*
+data/external/*
+models/*
+!**/.gitkeep
+
+# Docs build
+site/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

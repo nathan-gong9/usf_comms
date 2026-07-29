@@ -1,0 +1,11 @@
+site_name: plumage
+site_description: An editorial, emerald-and-espresso matplotlib data-visualization library.
+theme:
+  name: material
+  palette:
+    primary: teal
+    accent: brown
+nav:
+  - Home: index.md
+  - Palette: palette.md
+docs_dir: docs
